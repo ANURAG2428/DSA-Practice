@@ -8,6 +8,8 @@
  */
 
 /* 
+
+Brute Force Approch : 
 t.c = O(n) // kyoki hme puri LL traverse krke to dekhni pd hi rhi hai
 s.c = o(n) // kyoki hmne unordered_Set create kara hai aur usme unique address ke node store karaynge 
  */
