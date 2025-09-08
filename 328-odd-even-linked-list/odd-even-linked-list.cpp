@@ -11,21 +11,25 @@
 class Solution {
 public:
     ListNode* oddEvenList(ListNode* head) {
-        if (!head || !head->next) return head;  // Handle edge cases
-
-        ListNode* odd = head;
-        ListNode* even = head->next;
-        ListNode* evenHead = even;  // Store the head of the even list
-        
-        while (even && even->next) {
-            odd->next = odd->next->next;  // Link the next odd node
-            even->next = even->next->next;  // Link the next even node
-            
-            odd = odd->next;  // Move odd pointer
-            even = even->next;  // Move even pointer
+        if (head == nullptr || head->next == nullptr) {
+            return head;  // Agar linked list empty ho ya ek hi element ho toh direct return kar dena
         }
 
-        odd->next = evenHead;  // Link the end of odd list to the head of even list
-        return head;
+        // Initializing two pointers for odd and even
+        ListNode* odd = head;
+        ListNode* even = head->next;
+        ListNode* evenHead = even; // Even head ko store kar rahe hain taaki end mein use kar sakein
+
+        while (even != nullptr && even->next != nullptr) {
+            odd->next = odd->next->next;  // Odd node ka next odd node set karna
+            even->next = even->next->next; // Even node ka next even node set karna
+
+            odd = odd->next; // Odd pointer ko next odd node pe move karna
+            even = even->next; // Even pointer ko next even node pe move karna
+        }
+
+        odd->next = evenHead; // Last mein odd list ka next even list ka head ho
+
+        return head; // Finally head ko return karna
     }
 };
