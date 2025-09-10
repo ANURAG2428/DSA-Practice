@@ -11,35 +11,41 @@
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-         // Step 1: Create a dummy node that points to the head
-        ListNode* dummy = new ListNode(0);
-        dummy->next = head;
-
-        // Step 2: Set two pointers - slow and fast - both starting from dummy
-        ListNode* slow = dummy;
-        ListNode* fast = dummy;
-
-        // Step 3: Move the fast pointer n steps ahead
-        for (int i = 0; i < n; ++i) {
-            fast = fast->next;
+        // first Calculate the length of LL
+        ListNode* temp = head;
+        int len = 0;
+        while(temp!=NULL){
+            len++;
+            temp = temp->next;
         }
+        // loop end -> means hame length of LL pta chal gyi hogi
 
-        // Step 4: Move both pointers until fast reaches the end
-        while (fast->next != nullptr) {
-            fast = fast->next;
-            slow = slow->next;
+        
+        
+        ListNode* prev = NULL;
+        ListNode* curr = head;
+        int cnt = 0;
+        int backcount = len-n;
+        // If we need to remove the head (backcount == 0) (len-n = 2-2(2nd position from the last of LL))
+        if(backcount == 0) {
+            ListNode* newHead = head->next;
+            delete head; // Optional: free memory
+            return newHead;
         }
+        
+        while(cnt!=backcount){
+            prev = curr;
+            curr = curr->next;
+            cnt++;
+        }
+        // loop end hote hi , curr will be at the node jo delete krna hai and prev will at (node-1)
+        prev->next = curr->next; // jaha mera curr pehle , point kr rha tha waha ab prev point karega
+        curr->next = NULL; // curr ke next ko NULL kar diya
+        delete curr;
 
-        // Step 5: Now, slow is just before the node we want to delete
-        ListNode* nodeToDelete = slow->next;
-        slow->next = slow->next->next;
+        return head;
 
-        // Step 6: Free the memory of the deleted node
-        delete nodeToDelete;
-
-        // Step 7: Return the new head
-        ListNode* newHead = dummy->next;
-        delete dummy; // Free the dummy node
-        return newHead;
     }
+    
+    
 };
