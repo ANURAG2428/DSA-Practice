@@ -11,24 +11,26 @@
 class Solution {
 public:
     ListNode* deleteMiddle(ListNode* head) {
-        // If there's only one node, return nullptr
-        if (!head || !head->next) return nullptr;
+              // Agar sirf ek node hai to usko delete karke NULL return karna hai
+        if (head == nullptr || head->next == nullptr) {
+            return nullptr;
+        }
 
-        // Use slow and fast pointers
+        // Slow and Fast pointer approach se middle node dhoondhenge
         ListNode* slow = head;
         ListNode* fast = head;
-        ListNode* prev = nullptr;
+        ListNode* prev = nullptr; // Ye slow ke pichle node ko track karega
 
-        // Move fast by 2 and slow by 1
-        while (fast && fast->next) {
+        // Jab tak fast ya fast->next NULL nahi hota, tab tak loop chalayenge
+        while (fast != nullptr && fast->next != nullptr) {
             prev = slow;
             slow = slow->next;
             fast = fast->next->next;
         }
 
-        // Delete the middle node
+        // Ab slow middle node par hai, usko hata dete hain
         prev->next = slow->next;
-        delete slow;
+        delete slow; // Memory free kar di
 
         return head;
     }
