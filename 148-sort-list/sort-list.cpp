@@ -8,61 +8,40 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+
+/* 
+T.C = O(N) + O(N logN) + O(N) = O(N logN)
+S.C = O(N)
+ */
+
 class Solution {
 public:
     ListNode* sortList(ListNode* head) {
-         if (head == nullptr || head->next == nullptr) {
+        // EDGE CASE
+        if(head==NULL || head->next ==NULL){
+            
             return head;
         }
+
+        vector<int>arr;
         
-        ListNode* mid = getMid(head);
-        ListNode* left = sortList(head);
-        ListNode* right = sortList(mid);
-        
-        return merge(left, right);
-    }
-    
-private:
-    ListNode* getMid(ListNode* head) {
-        ListNode* slow = head;
-        ListNode* fast = head;
-        ListNode* prev = nullptr;
-        
-        while (fast != nullptr && fast->next != nullptr) {
-            prev = slow;
-            slow = slow->next;
-            fast = fast->next->next;
+        ListNode* temp = head;
+        while(temp!=NULL){                    // T.C = O(N)
+            arr.push_back(temp->val);
+            temp = temp->next;
         }
-        
-        // Break the list into two parts
-        if (prev != nullptr) {
-            prev->next = nullptr;
+        int n = arr.size(); // syntax to get size of vector
+        // after the end of this loop , arr will contain val of LL in unsorted order
+
+        // Now we will sort the element in the array (using either Quick/Merge Sort)
+        sort(arr.begin(),arr.end());                       // T.C = O(n logn)
+
+        // now element inside the arr are sorted
+        temp = head;
+        for(int i = 0; i<n ; i++){            // T.C = O(N)
+            temp->val = arr[i];
+            temp = temp -> next;
         }
-        
-        return slow;
-    }
-    
-    ListNode* merge(ListNode* l1, ListNode* l2) {
-        ListNode dummy(0);
-        ListNode* tail = &dummy;
-        
-        while (l1 != nullptr && l2 != nullptr) {
-            if (l1->val < l2->val) {
-                tail->next = l1;
-                l1 = l1->next;
-            } else {
-                tail->next = l2;
-                l2 = l2->next;
-            }
-            tail = tail->next;
-        }
-        
-        if (l1 != nullptr) {
-            tail->next = l1;
-        } else {
-            tail->next = l2;
-        }
-        
-        return dummy.next;
+        return head;
     }
 };
