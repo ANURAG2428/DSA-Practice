@@ -1,29 +1,35 @@
 class Solution {
 public:
-    bool isPalindrome(string s) {
-        int left = 0, right = s.size() - 1;
 
-    while (left < right) {
-        // Skip non-alphanumeric characters from left side
-        while (left < right && !isalnum(s[left])) {
-            left++;
+    bool help(string &str , int s ,int e){
+        // base case condition
+        if(s>=e){
+            return true; // means dono pointer cross kr gye -> which means string palindrome tha 
+        }
+        // agr  non alphanumer incounter hota hai mai start ko 1 position age bda dunga
+        if(!isalnum(str[s])){
+            return help(str,s+1 ,e);
+        }
+        // similarly agr non alphanumer incounter hota hai mai end ko 1 position piche bda dunga
+        if(!isalnum(str[e])){
+            return help(str,s , e-1);
         }
 
-        // Skip non-alphanumeric characters from right side
-        while (left < right && !isalnum(s[right])) {
-            right--;
+        // agr mujhe kisi bhi point pai start and end pointer wale letter (which must be lowercase ) equal nhi mile i will return false
+        if(tolower(str[s])!= tolower(str[e])){
+            return false; // means NOT A PALINDROME
         }
 
-        // Check if characters match (case-insensitive)
-        if (tolower(s[left]) != tolower(s[right])) {
-            return false;  // Not a palindrome
-        }
-
-        left++;
-        right--;
+        // Recursively function ko call karenge for further moving of pointer to next letter from both end
+        return help (str, s + 1, e-1);
     }
 
-    return true;  // Palindrome
+    bool isPalindrome(string str) {
+    int s = 0;
+    int e = str.length() - 1;
 
+    return help(str, s, e);    
     }
+
+    
 };
