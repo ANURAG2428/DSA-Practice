@@ -1,31 +1,45 @@
 class Solution {
 public:
-    int myAtoi(string s) {
-         int i = 0, n = s.length();
-        // Step 1: Ignore leading whitespaces
-        while (i < n && s[i] == ' ') {
-            i++;
+    int solve(string &str, int i, long num, int sign) {
+        // ✅ CORRECTED BASE CASE
+        if(i >= str.size() || !isdigit(str[i])) {
+            return (int)(sign * num);
         }
 
-        // Step 2: Check for optional '+' or '-' sign
+        // Digit convert kro
+        int digit = str[i] - '0';
+        num = num * 10 + digit;
+
+        // Overflow check
+        if(sign == 1 && num > INT_MAX) {
+            return INT_MAX;
+        }
+        if(sign == -1 && -num < INT_MIN) {
+            return INT_MIN;
+        }
+
+        // Recursive call
+        return solve(str, i + 1, num, sign);
+    }
+
+    int myAtoi(string str) {
+        int i = 0;
+        
+        // Whitespaces skip
+        while(i < str.size() && str[i] == ' ') i++;
+
+        // Handle sign
         int sign = 1;
-        if (i < n && (s[i] == '+' || s[i] == '-')) {
-            sign = (s[i] == '-') ? -1 : 1;
+        if(i < str.size() && (str[i] == '+' || str[i] == '-')) {
+            sign = (str[i] == '-') ? -1 : 1;
             i++;
         }
 
-        // Step 3: Convert digits to number
-        long long result = 0;
-        while (i < n && isdigit(s[i])) {
-            result = result * 10 + (s[i] - '0');
-
-            // Step 4: Clamp result if it goes out of int range
-            if (result * sign > INT_MAX) return INT_MAX;
-            if (result * sign < INT_MIN) return INT_MIN;
-
-            i++;
+        // ✅ ADD: Non-digit milte hi return 0
+        if(i < str.size() && !isdigit(str[i])) {
+            return 0;
         }
 
-        return result * sign;
+        return solve(str, i, 0, sign);
     }
 };
