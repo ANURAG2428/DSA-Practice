@@ -1,13 +1,20 @@
+/* 
+Time Complexity: O(log n) 
+
+Space Complexity: O(log n)
+*/
+
+
 class Solution {
 public:
     
-    double solve(double x, long n) {
-        
+    double solve(double x, long long n) {
+        // ye hogya mera edge case condition + B.C.C
         if(n == 0)
             return 1;
         
         if(n < 0)
-            return 1/solve(x, -n);
+            return solve(1/x, -n);
         
         
         if(n%2 == 0) {
@@ -19,6 +26,6 @@ public:
     }
     
     double myPow(double x, int n) {
-        return solve(x, (long)n);
+        return solve(x, (long long)n);
     }
 };
