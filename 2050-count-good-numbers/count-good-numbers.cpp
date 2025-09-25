@@ -1,28 +1,24 @@
 class Solution {
 public:
-    int mod = 1e9 + 7;
-    
-    long long power(long long x, long long y) {
-        long long res = 1;
-        x %= mod;
-        
-        while(y > 0) {
-            if(y & 1) {
-                res = (res * x) % mod;
-            }
-            y >>= 1;
-            x = (x * x) % mod;
+
+    const int M = 1e9+7;
+    int findpow(long long a , long long b){
+        // Base Case Condition
+        if(b == 0){
+            return 1;
         }
-        return res;
+
+        long long  half = findpow (a, b/2);
+        long long  result = (half * half) % M ; // in case of even b
+        
+        if(b%2==1){ // means b is odd
+            result = (a * result) % M;
+        } 
+        return result;
+
     }
-    
+
     int countGoodNumbers(long long n) {
-        long long even_count = (n + 1) / 2;
-        long long odd_count = n / 2;
-        
-        long long even_ways = power(5, even_count);
-        long long odd_ways = power(4, odd_count);
-        
-        return (even_ways * odd_ways) % mod;
+        return (long  long) findpow(5, (n+1)/2) * findpow(4 ,n/2) % M;
     }
 };
