@@ -1,21 +1,43 @@
+// idhr ek mujhe temp array leni padegi to get the subequnce out of num array and ek mujhe new array leni padegi to store all the subsequences in it and print it
+
+
+/* 
+Hum vector<vector<int>> isliye likhte hain kyunki:
+Har subset ek vector<int> hota hai
+Aur hume sab subsets ek saath store karne hain
+Isliye hume chahiye “vector of vector of int”
+
+ */
+
 class Solution {
 public:
-    void backtrack(vector<int>& nums, vector<int>& current, vector<vector<int>>& result, int start) {
-        // Add current subset to the result
-        result.push_back(current);
-        
-        // Explore further elements to include in the current subset
-        for (int i = start; i < nums.size(); i++) {
-            current.push_back(nums[i]);
-            backtrack(nums, current, result, i + 1); // move to the next element
-            current.pop_back(); // Backtrack, remove the last element
-        }
+
+void printF(int ind , vector<int>&ds , vector<vector<int>>&store, vector<int>&nums,  int n){
+    if(ind == n){
+        store.push_back(ds);
+        return;
     }
 
+    // sbse pehle hm element pick karenge
+    ds.push_back(nums[ind]);
+    printF(ind + 1 , ds , store , nums ,n);
+
+    // not pick current element
+    ds.pop_back();
+    printF(ind + 1, ds ,store, nums, n);
+
+
+}
+
+
     vector<vector<int>> subsets(vector<int>& nums) {
-        vector<vector<int>> result;
-        vector<int> current;
-        backtrack(nums, current, result, 0); // start from the first element
-        return result;
+        vector<int>ds; // temp array to form subsequence
+        vector<vector<int>>store; // new array to store all subsequnce , help in printing the output
+        int n = nums.size(); // size of the nums array;
+
+        // Recursive function called
+        printF(0,ds , store,nums , n); 
+        
+        return store;   
     }
 };
