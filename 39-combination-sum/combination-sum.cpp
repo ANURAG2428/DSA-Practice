@@ -1,38 +1,34 @@
-
-
 class Solution {
 public:
-    // Helper function to perform backtracking
-    void backtrack(int start, int target, vector<int>& candidates, vector<int>& currentCombination, vector<vector<int>>& result) {
-        // Agar target 0 ho gaya, toh current combination ko result mein add kar do
+    // Function to find all combinations
+    void backtrack(int start, int target, vector<int>& candidates, vector<int>& current, vector<vector<int>>& result) {
+        // Base case: when the target becomes 0, add the current combination to result
         if (target == 0) {
-            result.push_back(currentCombination);
+            result.push_back(current);
             return;
         }
         
-        // Loop through candidates and try each one
-        for (int i = start; i < candidates.size(); i++) {
-            // Agar current candidate target se zyada hai, toh break kar dena
-            if (candidates[i] > target) break;
-            
-            // Include current candidate and recursively call for the next target
-            currentCombination.push_back(candidates[i]);
-            backtrack(i, target - candidates[i], candidates, currentCombination, result);
+        // If the target is less than 0, no point in continuing
+        if (target < 0) {
+            return;
+        }
+        
+        // Iterate through the candidates starting from 'start' index to allow duplicates
+        for (int i = start; i < candidates.size(); ++i) {
+            // Add the current candidate to the current combination
+            current.push_back(candidates[i]);
+            // Recursively call backtrack with reduced target and the same start index (allowing repetition)
+            backtrack(i, target - candidates[i], candidates, current, result);
             // Backtrack: remove the last added element
-            currentCombination.pop_back();
+            current.pop_back();
         }
     }
 
+    // Main function to solve the problem
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
         vector<vector<int>> result;
-        vector<int> currentCombination;
-        
-        // Sort candidates to make sure we can break early if needed
-        sort(candidates.begin(), candidates.end());
-        
-        // Start backtracking from index 0
-        backtrack(0, target, candidates, currentCombination, result);
-        
+        vector<int> current;
+        backtrack(0, target, candidates, current, result);
         return result;
     }
 };
