@@ -1,24 +1,22 @@
 class Solution {
 public:
-    void backtrack(vector<int>& nums, vector<vector<int>>& result, vector<int>& temp, int start) {
-        result.push_back(temp); // Add the current subset (temp) to result
-        
-        for (int i = start; i < nums.size(); i++) {
-            // Skip duplicates
-            if (i > start && nums[i] == nums[i - 1]) continue;
-            
-            temp.push_back(nums[i]); // Choose the current element
-            backtrack(nums, result, temp, i + 1); // Recur for the next element
-            temp.pop_back(); // Backtrack, remove the current element
-        }
+
+void findSubsets(int ind , vector<int>&nums , vector<int>&ds , vector<vector<int>>&ans){
+    ans.push_back(ds);
+    for(int i = ind ; i<nums.size() ; i++){
+        if(i!=ind && nums[i] == nums[i-1]) continue;
+        ds.push_back(nums[i]);
+        findSubsets(i+1, nums , ds , ans);
+        ds.pop_back();
     }
-    
+}
+
+
     vector<vector<int>> subsetsWithDup(vector<int>& nums) {
-        sort(nums.begin(), nums.end()); // Sort to easily skip duplicates
-        vector<vector<int>> result;
-        vector<int> temp;
-        backtrack(nums, result, temp, 0);
-        return result;
-        
+        vector<vector<int>>ans;
+        vector<int>ds;
+        sort(nums.begin() , nums.end()); //pehle array sort kr le taaki mai is logic se unique subsequence nikal sku
+        findSubsets(0,nums, ds,ans);
+        return ans;
     }
 };
