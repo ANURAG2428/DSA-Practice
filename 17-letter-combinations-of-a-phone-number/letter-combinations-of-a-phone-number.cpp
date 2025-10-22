@@ -1,35 +1,47 @@
 class Solution {
 public:
-    vector<string> letterCombinations(string digits) {
-        // Mapping digits to letters
-        vector<string> mapping = {
-            "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"
-        };
-        
-        vector<string> result;
-        
-        // Agar digits empty hai to return empty result
-        if (digits.empty()) return result;
-        
-        // Helper function for backtracking
-        backtrack(result, digits, mapping, "", 0);
-        
-        return result;
+
+void Combination(int index, string digits , map<char,string>&mpp , string &ds , vector<string>&store){
+    // Base Case Condition
+    if(index == digits.size()){
+        if(!ds.empty()){
+            store.push_back(ds);
+        }
+        return;
     }
-    
-    // Backtracking function to generate all combinations
-    void backtrack(vector<string>& result, const string& digits, const vector<string>& mapping, string current, int index) {
-        // Agar humne saare digits process kar liye hain, to current combination ko result mein add karte hain
-        if (index == digits.size()) {
-            result.push_back(current);
-            return;
-        }
+
+    char digit = digits[index];
+    string letters = mpp[digit]; // us particular digit{key} ki {value} dedega 
+
+
+    for(int i = 0 ; i<letters.size(); i++){
+        // Take element
+        ds.push_back(letters[i]);
+        Combination(index+1,  digits ,mpp,ds,store);
+        ds.pop_back(); // Backtrack
+
+    }
+}
+
+    vector<string> letterCombinations(string digits) {
+        if(digits.empty()) return {};
+
+        map<char,string>mpp = {
+            {'2', "abc"}, 
+            {'3', "def"}, 
+            {'4', "ghi"},
+            {'5', "jkl"},
+            {'6', "mno"},
+            {'7', "pqrs"},
+            {'8', "tuv"},
+            {'9', "wxyz"}
+        };
+
+        string ds = ""; // temporary vector for making subsequnece
+        vector<string>store; // for storing the required string 
+
+        Combination( 0 ,digits , mpp ,ds , store);
+        return store;
         
-        // Current digit se associated letters ko iterate karte hain
-        string letters = mapping[digits[index] - '0'];
-        for (char letter : letters) {
-            // Har letter ke liye backtrack call karte hain
-            backtrack(result, digits, mapping, current + letter, index + 1);
-        }
     }
 };
