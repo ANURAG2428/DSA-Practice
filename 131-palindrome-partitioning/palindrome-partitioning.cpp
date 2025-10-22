@@ -1,41 +1,38 @@
 class Solution {
 public:
-    // Helper function to check if a string is a palindrome
-    bool isPalindrome(const string& s, int left, int right) {
-        while (left < right) {
-            if (s[left] != s[right]) return false;
-            left++;
-            right--;
-        }
-        return true;
+    vector<vector<string>> partition(string s) {
+        vector<vector<string>> res;
+        vector<string> path;
+        func(0, s, path, res);
+        return res;
     }
 
-    // Backtracking function to find all possible palindrome partitions
-    void backtrack(int start, const string& s, vector<string>& current, vector<vector<string>>& result) {
-        if (start == s.size()) {
-            // Jab hum end pe pahuch jate hain, to current partition ko result mein daal dete hain
-            result.push_back(current);
+    void func(int index, string s, vector<string> &path, vector<vector<string>> &res) {
+        // Base Case
+        if(index == s.size()) {
+            res.push_back(path);  // ✅ Store valid partition
             return;
         }
 
-        // Ab har possible substring check karte hain
-        for (int end = start; end < s.size(); end++) {
-            // Agar current substring palindrome hai
-            if (isPalindrome(s, start, end)) {
-                // To us substring ko current partition mein daal do
-                current.push_back(s.substr(start, end - start + 1));
-                // Backtrack call to find the next partition
-                backtrack(end + 1, s, current, result);
-                // Backtrack: Remove last element and try next substring
-                current.pop_back();
+        for(int i = index; i < s.size(); i++) {
+            if(isPalindrome(s, index, i)) {  // Check substring s[index..i]
+                // Take this palindrome substring
+                path.push_back(s.substr(index, i - index + 1));
+                
+                // Recursive call from NEXT position
+                func(i + 1, s, path, res);
+                
+                // Backtrack
+                path.pop_back();
             }
         }
     }
 
-    vector<vector<string>> partition(string s) {
-        vector<vector<string>> result;  // Final answer, containing all partitions
-        vector<string> current;  // Temporary list for current partition
-        backtrack(0, s, current, result);
-        return result;
+    bool isPalindrome(string s, int start, int end) {
+        while(start <= end) {
+            if(s[start++] != s[end--])
+                return false;
+        }
+        return true;
     }
 };
