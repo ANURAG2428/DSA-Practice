@@ -1,38 +1,34 @@
 class Solution {
 public:
     int divide(int dividend, int divisor) {
-        // Agar divisor 0 ho toh division impossible hai, lekin yeh problem mein allowed nahi hai
-        if (divisor == 0) return INT_MAX;
+        if (dividend == divisor)
+            return 1;
 
-        // Sign ka track rakho, kyunki negative or positive result ho sakta hai
-        bool isNegative = (dividend < 0) ^ (divisor < 0);
+        bool sign = true;
+        if ((dividend >= 0 && divisor < 0) || (dividend < 0 && divisor > 0))
+            sign = false;
 
-        // Convert dividend aur divisor ko positive values mein, taaki hum easier calculation kar sakein
-        long long absDividend = abs((long long)dividend);
-        long long absDivisor = abs((long long)divisor);
+        long long n = abs((long long)dividend);
+        long long d = abs((long long)divisor);
 
         long long quotient = 0;
-
-        // Hum ek efficient way se division karenge using subtraction method
-        while (absDividend >= absDivisor) {
-            long long tempDivisor = absDivisor, multiple = 1;
-            while (absDividend >= (tempDivisor << 1)) {
-                tempDivisor <<= 1;   // Shift left means multiply by 2
-                multiple <<= 1;      // Increase multiple by powers of 2
+        while (n >= d) {
+            int cnt = 0;
+            // Check d << (cnt+1) doesn't overflow and is <= n
+            while (n >= (d << (cnt + 1))) {
+                cnt++;
             }
-            absDividend -= tempDivisor;   // Subtract the divisor
-            quotient += multiple;         // Add the multiple to the result
+            quotient += (1LL << cnt);
+            n -= (d << cnt);
         }
 
-        // Agar sign negative hai, toh quotient ko negative kar do
-        if (isNegative) {
+        if (!sign)
             quotient = -quotient;
-        }
 
-        // Int overflow ka check karna zaroori hai
-        if (quotient > INT_MAX) return INT_MAX;
-        if (quotient < INT_MIN) return INT_MIN;
-
+        if (quotient > INT_MAX)
+            return INT_MAX;
+        if (quotient < INT_MIN)
+            return INT_MIN;
         return quotient;
     }
 };
