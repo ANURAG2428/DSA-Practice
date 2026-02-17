@@ -1,48 +1,56 @@
-// Approch 1 : ye mai tb implement kar rha hu , jb push operations km hai , kyoki mere push ke code mai 2 while loop honge which makes its T.C = O(2N) and it is a costly operation and will reduce my code effeciency and perfomance
+// Approch 2 : here mere pass bht sare push() operation hai in input as compare to pop() and top() , so i will choose this approch, as 
+
+// koi hard & fast rule nhi hai ki sirf st1 ko use krke hi result return krna hai , hm dono mai se kisi bhi stack ko us krke us particular operation ka result return kara skte hai
 
 class MyQueue {
-    private:
-    stack<int>st1;  // stack 1 
-    stack<int>st2;  // stack 2
+    // similarly we will make 2 stack
+    private: 
+    stack<int>st1;
+    stack<int>st2;
 public:
     MyQueue() {
-        // It is default constructor that is called when object is created of the above class , 
+        // Default Constructor
     }
     
-    void push(int x) {  // T.C = O(2n) , this code of push is only applicable if push operations are way less as compare to pop() and top() , else we prefer to follow Approch 2 , where large no of push operation are handeled with effective T.C
-
-
-        // step 1 : st1 ke sare element st2 mai daal do 
-        while(st1.size()){
-            st2.push(st1.top());
-            st1.pop();
-        }
-
-        // Step 2 : ab st1 mai new element x daal do
-        st1.push(x);
-
-        // step 3 : st2 ke sare element st1 mai wapis daal do
-        while(st2.size()){
-            st1.push(st2.top());
-            st2.pop();
-        }
-
-        // here push operation is handeled fully 
+    void push(int x) {
+        st1.push(x); // is approch hm st1 mai sare push operation ke element store karate reh jayenge
     }
     
     int pop() {
-        int n = st1.top();
-        st1.pop();
-        return n;
+        if(st2.size()){ // means i have element in st2
+            int n = st2.top();
+            st2.pop();
+            return n;
+        }
+        else{ // means no element in st2 , aur yhi stack shi top dega
+            while(st1.size()!=0){
+                st2.push(st1.top());
+                st1.pop();
+            }
+            // loop se bahr aagya means sare element st2 stack mai aagye , now
+            int m = st2.top();
+            st2.pop();
+            return m;
+        }
     }
     
     int peek() {
-        return st1.top();
+        if(st2.size()){ // means element are present in st2 stack
+            return st2.top();
+        }
+        else{ // means no element present in st2
+            while(st1.size()!=0){
+                st2.push(st1.top());
+                st1.pop();
+            }
+            // loop se bahr aagya means sare element st2 mai aagye
+            return st2.top();
+
+        }
     }
     
     bool empty() {
-        return st1.empty();
-        
+        return st1.empty() && st2.empty();
     }
 };
 
