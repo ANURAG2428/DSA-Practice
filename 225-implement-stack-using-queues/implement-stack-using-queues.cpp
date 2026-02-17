@@ -1,49 +1,38 @@
-#include <queue>
-using namespace std;
-
 class MyStack {
-private:
-    queue<int> q1;
-    queue<int> q2;
-    
+    private:
+    queue<int>q; // idhr mene queue create kr li 
 public:
     MyStack() {
-        // Constructor - kuch initialize karne ki need nahi
+    // constuctor will be called during object creation , but yaha koi parameter to hai nhi pass krne ke liye so it is a default constructor jo ki call hoga        
     }
     
     void push(int x) {
-        // Naya element ko q2 mein daalo
-        q2.push(x);
-        
-        // Q1 ke saare elements ko q2 mein move karo
-        while(!q1.empty()) {
-            q2.push(q1.front());  // Q1 ka front element q2 mein daalo
-            q1.pop();             // Q1 se remove karo
+        // sbse pehle current queue ka size store kara le in variable
+        int s = q.size(); // push krne se pehle maine size store kara liya for ease 
+        q.push(x); // ab mene ye x element ko queue mai rear mai store kara liya
+        // Now ab mera main task hai isko front position pai lana because queue ese hi kaam karta hai
+        for(int i = 0; i<s ; i++ ){ // less than s because indexing 0 se shuru ho rhi hai
+            q.push(q.front());
+            q.pop();// ab piche mene shift kara liya hai , ab isko aage se remove kara diya
         }
-        
-        // Swap karo q1 aur q2 ko
-        swap(q1, q2);
     }
     
     int pop() {
-        // Stack ka top element return karo aur remove karo
-        if(q1.empty()) return -1;  // Stack empty hai
-        
-        int topElement = q1.front();
-        q1.pop();
-        return topElement;
+        // mene  front element ko int variable mai store kara liya because this func is of int type so isko int return krna hai which is front , so to store it i have used n
+        int n = q.front();    
+        q.pop();
+        return n;
     }
     
     int top() {
-        // Stack ka top element return karo (without remove)
-        if(q1.empty()) return -1;
-        return q1.front();
+        return q.front(); // simply return the top element which is the front elemnt in the queue
+        
     }
     
     bool empty() {
-        // Check karo stack empty hai ya nahi
-        return q1.empty();
+        return q.empty();
     }
+
 };
 
 /**
