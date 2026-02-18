@@ -1,50 +1,43 @@
 class MinStack {
+    private:
+    stack<int>st1; // here i have created a stack inside MinStack class
+    stack<int>st2; // this stack helps to store the minmum element 
 public:
-    stack<long long> st;  // stack bana liya
-    long long mini;       // current minimum store karne ke liye
-
     MinStack() {
-        while (!st.empty()) st.pop(); // stack clear kar diya (optional)
-        mini = INT_MAX;               // initially min bohot bada
+        // Default Constructor
     }
-
+    
+    
     void push(int val) {
-        if (st.empty()) {
-            st.push(val);
-            mini = val;
-        } else {
-            if (val < mini) {
-                // encode kar rahe hain taaki purana min yaad rahe
-                st.push(2LL * val - mini);
-                mini = val;
-            } else {
-                st.push(val);
-            }
-        }
-    }
+        st1.push(val);
 
+        // stack2 (Min stack) mai sirf tb push kro jb val current st.top() ke equal(to handle dublicate case) ya chota ho
+        if(st2.empty() || val<=st2.top()){ // ya to stack 2 empty hai for initial element to get into stack 2 as min or current val equal hai ya choti hai stack2 ke top element se
+            st2.push(val);
+        }  
+    }
+    
     void pop() {
-        if (st.empty()) return;
-
-        long long topVal = st.top();
-        st.pop();
-
-        if (topVal < mini) {
-            // iska matlab encoded value thi, to purana min wapas lao
-            mini = 2LL * mini - topVal;
+        if(st1.top() == st2.top()){
+            st2.pop(); // removes the top most element which is current min
         }
+        st1.pop(); // removes the top element from stack 1
     }
-
+    
     int top() {
-        long long topVal = st.top();
-        if (topVal < mini) {
-            // encoded value thi, matlab actual top == mini
-            return (int)mini;
-        }
-        return (int)topVal;
+        return st1.top();
     }
-
+    
     int getMin() {
-        return (int)mini;
+        return st2.top();
     }
 };
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(val);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
