@@ -2,25 +2,20 @@ class Solution {
 public:
     bool check(vector<int>& nums) {
         int n = nums.size();
-        int count = 0;
+        int cnt = 0;
 
-        // Traverse array and count break points
-        for (int i = 0; i < n; i++) {
-            // next index ko circular way mein lena hai
-            int next = (i + 1) % n;
+        if(n<=1) return true;
 
-            // Agar current element next se bada hai, toh ek break hai
-            if (nums[i] > nums[next]) {
-                count++;
-            }
-
-            // Agar 1 se zyada breaks mil gaye, toh sorted rotated nahi hai
-            if (count > 1) {
-                return false;
+        for(int i = 0; i<n ; i++){
+            // Circular check last element se first element tk 
+            if(nums[i] > nums[(i+1) % n]){
+                cnt++;
             }
         }
 
-        // Agar 0 ya 1 break mila, toh valid sorted and rotated array hai
-        return true;
+        if(cnt <= 1){
+            return true;
+        }
+        return false;
     }
 };
