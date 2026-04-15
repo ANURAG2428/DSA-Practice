@@ -5,7 +5,7 @@ public:
         int n = nums.size();
         vector<int>arr(n);
         // if k is greater than n , in this case also use % operator
-        k = k % n;
+        // k = k % n;
         for(int i = 0; i<n ; i++){
             arr[(i+k) % n] = nums[i];
         }
