@@ -1,48 +1,43 @@
-
 class Solution {
 public:
     vector<int> spiralOrder(vector<vector<int>>& matrix) {
-        vector<int> ans; // Final answer yahan store karenge
-
-        if (matrix.empty()) return ans; // Agar matrix khali hai, to return kar do
-
-        int top = 0;                     // Upar wali boundary
-        int bottom = matrix.size() - 1;  // Neeche wali boundary
-        int left = 0;                    // Left boundary
-        int right = matrix[0].size() - 1;// Right boundary
-
-        // Jab tak sab boundaries valid hain
-        while (top <= bottom && left <= right) {
-
-            // Step 1: Left se Right move karna (Top row)
-            for (int j = left; j <= right; j++) {
-                ans.push_back(matrix[top][j]);
+        int n = matrix.size();
+        int m = matrix[0].size();
+        vector<int> ans;
+        
+        int sr = 0, er = n - 1;
+        int sc = 0, ec = m - 1;
+        
+        while(sr <= er && sc <= ec) {
+            // 1. Print top row (sr, sc to ec)
+            for(int col = sc; col <= ec; col++) {
+                ans.push_back(matrix[sr][col]);
             }
-            top++; // Top row ka kaam ho gaya, ab niche move karenge
-
-            // Step 2: Top se Bottom move karna (Right column)
-            for (int i = top; i <= bottom; i++) {
-                ans.push_back(matrix[i][right]);
+            sr++;
+            
+            // 2. Print right column (sr to er, ec)
+            for(int row = sr; row <= er; row++) {
+                ans.push_back(matrix[row][ec]);
             }
-            right--; // Right column ka kaam ho gaya, ab left side aayenge
-
-            // Step 3: Right se Left move karna (Bottom row)
-            if (top <= bottom) { // Check zaruri hai, warna duplicate add ho sakte hain
-                for (int j = right; j >= left; j--) {
-                    ans.push_back(matrix[bottom][j]);
+            ec--;
+            
+            // 3. Print bottom row (er, ec to sc) - only if sr <= er
+            if(sr <= er) {
+                for(int col = ec; col >= sc; col--) {
+                    ans.push_back(matrix[er][col]);
                 }
-                bottom--; // Bottom row complete ho gayi
+                er--;
             }
-
-            // Step 4: Bottom se Top move karna (Left column)
-            if (left <= right) { // Check zaruri hai
-                for (int i = bottom; i >= top; i--) {
-                    ans.push_back(matrix[i][left]);
+            
+            // 4. Print left column (er to sr, sc) - only if sc <= ec
+            if(sc <= ec) {
+                for(int row = er; row >= sr; row--) {
+                    ans.push_back(matrix[row][sc]);
                 }
-                left++; // Left column complete ho gaya
+                sc++;
             }
         }
-
+        
         return ans;
     }
 };
