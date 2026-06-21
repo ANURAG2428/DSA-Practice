@@ -1,27 +1,30 @@
 class Solution {
 public:
     int subarraySum(vector<int>& nums, int k) {
-        unordered_map<int, int> prefixSumCount; 
-        // Ye map rakhega har prefix sum kitni baar aaya hai
         
-        int count = 0;   // Kitne subarrays ka sum == k hai
-        int sum = 0;     // Current prefix sum
+        int sum = 0;
+        int n = nums.size();
+        int cnt = 0;
 
-        prefixSumCount[0] = 1; 
-        // Important: agar prefix sum khud hi k ho jaye to handle karne ke liye
+        map<int, int> h;
 
-        for (int i = 0; i < nums.size(); i++) {
-            sum += nums[i]; // Ab tak ka prefix sum
+        for(int i = 0; i < n; i++) {
 
-            // Check karo kya koi aisa prefix sum exist karta hai jisse current sum - old sum = k
-            if (prefixSumCount.find(sum - k) != prefixSumCount.end()) {
-                count += prefixSumCount[sum - k];
+            sum += nums[i];
+
+            // agar starting se current tak ka sum = k
+            if(sum == k) {
+                cnt++;
             }
 
-            // Ab current prefix sum ko map me daal do
-            prefixSumCount[sum]++;
+            // previous prefix sum check
+            if(h.count(sum - k)) {
+                cnt += h[sum - k];
+            }
+
+            h[sum]++;
         }
 
-        return count;
+        return cnt;
     }
 };
