@@ -8,7 +8,7 @@ public:
         // window grow
         p = p * v[ei];
         // window shrink
-        while(p>=k){
+        while(p>=k && si<=ei){
             p = p/v[si];
             si++;
         }
