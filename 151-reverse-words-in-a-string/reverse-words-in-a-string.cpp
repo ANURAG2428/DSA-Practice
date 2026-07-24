@@ -12,7 +12,10 @@ public:
         // " spaces automatically ignore ho jayenge and each word -> each time
         // would get stored in string word and will reverse that and store in
         // ans
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n;i++) { //  IMP - as it is nested loop iska ye mtlb nhi ki iski T.c
+                    //  = O(N^2) hogi -> kyoki yaha andar hm same i ke sath kaam
+                    //  kr rhe hai while loop mai -> we are iterating it
+                    //  linearly respective to both loop
             string word = "";
             while (i < n && s[i] != ' ') {
                 word = word + s[i];
@@ -21,11 +24,14 @@ public:
 
             // now ab jo word mila hai usse reverse kr de
             reverse(word.begin(), word.end());
-            if (word != "") {
-                ans = ans + " " + word;
+            // Isko replace kar do
+            if (!word.empty()) {
+                if (!ans.empty())
+                    ans += ' '; // Pehle space daalo agar ans khaali nahi hai
+                ans += word;    // Sirf word append karo (O(1) amortized)
             }
         }
-        return ans.substr(
-            1); // means 1st index se puri string a subsstring return krdo
+        return ans; // means 1st index se puri string a subsstring return krdo
     }
+
 };
