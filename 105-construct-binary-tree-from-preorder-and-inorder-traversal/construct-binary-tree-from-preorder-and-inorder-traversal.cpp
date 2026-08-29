@@ -6,38 +6,58 @@
  *     TreeNode *right;
  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
  * };
  */
 class Solution {
 public:
-    // Global index for preorder traversal
-    int preIdx = 0;
+    int preIndx = 0;
 
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        preIdx = 0;
-        return buildTreeHelper(preorder, inorder, 0, inorder.size() - 1);
-    }
+    TreeNode* BuildTree(vector<int>& preorder, int left, int right,
+                    unordered_map<int, int>& mpp) {
 
-    TreeNode* buildTreeHelper(vector<int>& pre, vector<int>& In, int s, int e) {
-        if (s > e) return NULL;
+        // step 1 : agr to mera left>right hogya means i have explored all value
+        // -> will simply return NULL
+        if (left > right)
+            return NULL;
 
-        // Step 1: Create root node from preorder
-        TreeNode* root = new TreeNode(pre[preIdx++]);
+        // step 2 : lets take root->value from preorder vector and uska ek root
+        // bana ke -> uske left aur right ke liye same process ke liye call kr
+        // dete hai via Recursive call
+        int rootvalue =
+            preorder[preIndx++]; // yaha mene preIndx ki value increase krdi to
+                                 // move at next root
 
-        // Step 2: Find root in inorder
-        int i;
-        for (int j = s; j <= e; j++) {
-            if (In[j] == root->val) {
-                i = j;
-                break;
-            }
-        }
+        // step 3 : created a new node for the rootvalue
+        TreeNode* root = new TreeNode(rootvalue);
 
-        // Step 3: Recursively build left and right subtrees
-        root->left = buildTreeHelper(pre, In, s, i - 1);
-        root->right = buildTreeHelper(pre, In, i + 1, e);
+        // ab mujhe rootvalue ka index nikal ke from the map -> which store indx
+        // of inorder traversal -> ab mujhe curr rootvalue ke index ke liye uske
+        // left and right node create kr kr unhe return karate hue tree form
+        // krna hai
+        int mid = mpp[rootvalue];
+
+        // step 4 : Recursive calls
+        root->left = BuildTree(
+            preorder, left, mid - 1,
+            mpp); // kyoki mujhe curr root ke left ka tree form krna hai
+        root->right = BuildTree(preorder, mid + 1, right, mpp);
 
         return root;
+    }
+
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+
+        // step 1 : inorder vector ke node->value ko unke index se map kra de
+        unordered_map<int, int> mpp;
+        for (int i = 0; i < inorder.size(); i++) {
+            mpp[inorder[i]] = i;
+        }
+
+        // step 2 : now ab above map ko use krke "BuildTree()" func se using
+        // preorder and inorder unique tree construct kr
+
+        return BuildTree(preorder, 0, inorder.size() - 1, mpp);
     }
 };
