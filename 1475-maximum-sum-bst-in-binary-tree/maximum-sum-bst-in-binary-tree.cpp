@@ -12,45 +12,56 @@
  */
 class Solution {
 public:
-    struct Info {
-        int mn, mx;
-        int sum;
-        bool isBST;
+    // global variable
+    int maxsum = 0;
 
-        Info(int mn, int mx, int sum, bool isBST)
-            : mn(mn), mx(mx), sum(sum), isBST(isBST) {}
+    // createad a class which will return custom format return type that will
+    // help in recursion function call return
+    class Info {
+    public:
+        int minVal; // subtree ka minimum
+        int maxVal; // subtree ka maximum
+        int sum;    // subtree ka total sum
+        bool isBST; // subtree BST hai ya nahi
     };
 
-    int ans = 0;
-
-    Info solve(TreeNode* root) {
-        if (!root) {
+    Info dfs(TreeNode* root) {
+        // B.C.C = null node
+        if (root == NULL) {
             return {INT_MAX, INT_MIN, 0, true};
         }
 
-        Info left = solve(root->left);
-        Info right = solve(root->right);
+        // Now do post order traversal first to get the info about node ->
+        // childern , then only i can pass on weather this is BST , maxlST value
+        // , min RST value , to upper tree while backtracking
+        Info left = dfs(root->left);
+        Info right = dfs(root->right);
 
-        // Current subtree is a BST if:
-        // left subtree is BST
-        // right subtree is BST
-        // max(left) < root->val < min(right)
-        if (left.isBST && right.isBST && left.mx < root->val &&
-            root->val < right.mn) {
+        // check karo current subtree BST hai ya nhi
+        bool isCurrentBST = left.isBST && right.isBST &&
+                            left.maxVal < root->val &&
+                            right.minVal > root->val;
 
-            int sum = left.sum + right.sum + root->val;
-            ans = max(ans, sum);
+        // if ye particular node(root) bst hai , then iska sum calculate karo
+        // and maxsum update karo and then minvalue and maxcalue with currsum
+        // and bst status return karo to upper node while backtracking ,
+        // otherwise NULL node wali same return type hoga curr node ka
 
-            return {min(left.mn, root->val), max(right.mx, root->val), sum,
-                    true};
+        if (isCurrentBST) {
+            int currsum = left.sum + right.sum + root->val;
+            maxsum = max(maxsum, currsum);
+
+            return {min(root->val, left.minVal), max(root->val, right.maxVal),
+                    currsum, true};
+        } else {
+            // BST ni hai , parent isse ignore karega
+            return {INT_MIN, INT_MAX, 0, false};
         }
-
-        // Not a BST
-        return {INT_MIN, INT_MAX, 0, false};
     }
 
     int maxSumBST(TreeNode* root) {
-        solve(root);
-        return ans;
+        maxsum = 0;
+        dfs(root);
+        return maxsum;
     }
 };
