@@ -1,29 +1,32 @@
 class Solution {
 public:
-    vector<int> arrayRankTransform(vector<int>& v1) {
-        int n = v1.size();
-        vector<int> v2 = v1;
+    vector<int> arrayRankTransform(vector<int>& arr) {
+        int n = arr.size();
+        if (n == 0)
+            return {};
 
-        // now sort the v2 vector
-        sort(v2.begin(), v2.end());
-
-        // now store the unique elements of v2 in unordered_map with their
-        // indexes
-        unordered_map<int, int> mpp;
-        int rank = 1;
-        for (int i = 0; i < v2.size(); i++) {
-            if (mpp.find(v2[i]) == mpp.end()) { // means not inserted yet in map
-                mpp[v2[i]] = rank; // tabhi mai map mai dalunga with rank
-                rank++;            // rank sirf new value pai badhao
-            }
-        }
-
-        // now ab original v1 ko traverse kr aur v1 ke element ki jgh unki rank
-        // place kr de
+        // Step 1: (value, originalIndex) pairs banao
+        vector<pair<int, int>> v(n);
         for (int i = 0; i < n; i++) {
-            v1[i] = mpp[v1[i]];
+            v[i] = {arr[i], i};
         }
 
-        return v1;
+        // Step 2: sort by value
+        sort(v.begin(), v.end());
+
+        // Step 3: ranks assign karo
+        vector<int> result(n);
+        int rank = 1;
+
+        result[v[0].second] = rank; // pehla element
+
+        for (int i = 1; i < n; i++) {
+            if (v[i].first != v[i - 1].first) {
+                rank++; // naya value → rank badhao
+            }
+            result[v[i].second] = rank;
+        }
+
+        return result;
     }
 };
