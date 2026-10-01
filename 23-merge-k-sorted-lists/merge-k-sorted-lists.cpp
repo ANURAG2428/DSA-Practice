@@ -10,38 +10,45 @@
  */
 class Solution {
 public:
-      struct Compare {
+    class cmp {
+    public:
         bool operator()(ListNode* a, ListNode* b) {
-            return a->val > b->val;
+            return a->val > b->val; // min-heap
+            // for max-heap use (<)
         }
     };
-
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        priority_queue<ListNode*, vector<ListNode*>, Compare> pq;
+        // create a pq (min-heap) of ListNode* type , where we compare not on the
+        // basis of address , but on the basis of value (with the help of custom
+        // comprator)
+        int n1 = lists.size();
 
-        // Har list ka first node heap me daalo
-        for (ListNode* node : lists) {
-            if (node != nullptr) {
-                pq.push(node);
+        priority_queue<ListNode*, vector<ListNode*>, cmp> pq;
+
+        // step 1 : sare head of all k linked list add kr initially in pq
+        for (int i = 0; i < n1; i++) {
+            if (lists[i] != NULL) {
+                pq.push(lists[i]);
             }
         }
 
-        ListNode dummy(0);
-        ListNode* tail = &dummy;
+        // now ab dummy ListNode bna and using curr min ListNode ko curr se attack krke
+        // min ko pop kra from pq and then if min->next !=null , then add in pq
+        // , and in the end  curr =curr->next
+        ListNode* dummy = new ListNode(0);
+        ListNode* curr = dummy;
 
+        // jb tk pq empty nhi ho jta do above step
         while (!pq.empty()) {
-            ListNode* curr = pq.top();
+            ListNode* minNode = pq.top();
             pq.pop();
+            curr->next = minNode;
+            curr = curr->next;
 
-            tail->next = curr;
-            tail = curr;
-
-            // Current node ke next ko heap me daalo
-            if (curr->next != nullptr) {
-                pq.push(curr->next);
+            if (minNode->next != NULL) {
+                pq.push(minNode->next);
             }
         }
-
-        return dummy.next;
+        return dummy->next; // return head
     }
 };
