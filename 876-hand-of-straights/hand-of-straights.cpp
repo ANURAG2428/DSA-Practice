@@ -32,7 +32,7 @@ public:
                        // consecutive element present in the mp , if not or
                        // mpp[curr] == 0  then return false
 
-                if (mpp.find(curr) == mpp.end() || mpp[curr] == 0) {
+                if (mpp.find(curr) == mpp.end() ) {
                     return false;
                 }
 
