@@ -1,7 +1,10 @@
 class Solution {
 public:
     bool isNStraightHand(vector<int>& v, int grpsize) {
+
+        
         int n = v.size();
+        if(n % grpsize != 0) return false;
 
         // step 1 : sbse pehle to store all no's freq into a map (ordered-map)
         map<int, int> mpp;
