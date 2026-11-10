@@ -9,7 +9,7 @@ using namespace std;
 
 class Solution {
     private:
-    void DFS(string word ,string beginword , unordered_set<string>&wordset,  vector<string>&currpath , vector<vector<string>>&ans ,unordered_map<string,int>&mpp){
+    void DFS(string word ,string beginword ,  vector<string>&currpath , vector<vector<string>>&ans ,unordered_map<string,int>&mpp){
         
         // 1st base case (agr to word == beginword -> measn we get sequence -> will simply add this currpath in ans vector )
         if(word == beginword){
@@ -30,7 +30,7 @@ class Solution {
                 word[i] = j + 'a';
                 if(mpp.find(word)!= mpp.end() && mpp[word]+1 == currlevel){ // means word exists in map , now ek aur if check is ki uska level must be 1 less than the currlevel 
                     currpath.push_back(word); // currpath vector mai word daal dunga
-                    DFS(word ,beginword ,wordset , currpath ,  ans , mpp );
+                    DFS(word ,beginword , currpath ,  ans , mpp );
                     // pop this new word added to get new dfs call for same level
                     currpath.pop_back();
                 }
@@ -88,8 +88,8 @@ public:
             vector<vector<string>>ans;
             vector<string>currpath;
             currpath.push_back(endword);
-            unordered_set<string>wordset2(wordList.begin() , wordList.end());
-            DFS(endword, beginword ,wordset2 , currpath ,  ans , mpp);
+            
+            DFS(endword, beginword  , currpath ,  ans , mpp);
             return ans;
         }
         return {};
