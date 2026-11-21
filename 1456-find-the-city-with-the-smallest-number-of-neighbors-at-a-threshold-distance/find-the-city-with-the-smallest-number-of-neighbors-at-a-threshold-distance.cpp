@@ -24,8 +24,12 @@ public:
             int v = it[1];
             int wt = it[2];
 
-            matrix[u][v] = wt;
-            matrix[v][u] = wt;
+            /* 
+            Note - ho skta hai same edge's ke multiple input diyo ho , aur ho skta hai order esa ho ki hmara answer glt aaye so mai min use karunga to assign matrix[u][v] and matrix[v][u] ko shi value se assign krne k liye
+            */
+
+            matrix[u][v] = min(matrix[u][v], wt);
+            matrix[v][u] = min(matrix[v][u], wt);
         }
 
         // IMP NOTE - daigonal ko 0 krde , kyoki node ka khud se distance hmesha 0 hi rahgea
